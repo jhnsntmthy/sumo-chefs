@@ -1,4 +1,5 @@
 {
   "owner_name": "root",
-  "basedir":"/mnt/cassandra"
+  "basedir":"/mnt/cassandra",
+  "recipes": ["cassandra"]
 }

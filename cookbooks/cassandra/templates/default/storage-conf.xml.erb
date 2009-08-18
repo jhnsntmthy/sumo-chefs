@@ -61,14 +61,14 @@
     <!-- Directories: Specify where Cassandra should store different data on disk
          Keep the data disks and the CommitLog disks separate for best performance
     -->
-    <CommitLogDirectory><%= @node[:basedir] %>/commitlog</CommitLogDirectory>
-    <MetadataDirectory><%= @node[:basedir] %>/system</MetadataDirectory>
+    <CommitLogDirectory><%= @node[:basedir] -%>/commitlog</CommitLogDirectory>
+    <MetadataDirectory><%= @node[:basedir] -%>/system</MetadataDirectory>
     <DataFileDirectories>
-        <DataFileDirectory><%= @node[:basedir] %>/data</DataFileDirectory>
+        <DataFileDirectory><%= @node[:basedir] -%>/data</DataFileDirectory>
     </DataFileDirectories>
-    <CalloutLocation><%= @node[:basedir] %>/callouts</CalloutLocation>
-    <BootstrapFileDirectory><%= @node[:basedir] %>/bootstrap</BootstrapFileDirectory>
-    <StagingFileDirectory><%= @node[:basedir] %>/staging</StagingFileDirectory>
+    <CalloutLocation><%= @node[:basedir] -%>/callouts</CalloutLocation>
+    <BootstrapFileDirectory><%= @node[:basedir] -%>/bootstrap</BootstrapFileDirectory>
+    <StagingFileDirectory><%= @node[:basedir] -%>/staging</StagingFileDirectory>
 
 
     <!-- Add names of hosts that are deemed contact points. Cassandra nodes use

@@ -3,11 +3,18 @@
 # Recipe:: default
 #
 
-package "sun-java6-jre" do
+package "openjdk-6-jre" do
   action :install
 end
 
 directory "#{node[:basedir]}" do
+  owner node[:owner_name]
+  group node[:owner_name]
+  mode 0755
+  recursive true
+end
+
+directory "#{node[:basedir]}/logs" do
   owner node[:owner_name]
   group node[:owner_name]
   mode 0755
@@ -23,32 +30,45 @@ end
 execute "untar" do
   cwd "/opt"
   command "tar -zxf cassandra.tgz"
-  creates "/opt/cassandra"  
+  creates "/opt/apache-cassandra-incubating-0.3.0"  
   action :run
 end
 
-template "/etc/cassandra/storage-conf.xml" do
+execute "rename original conf files" do
+  cwd "/opt/apache-cassandra-incubating-0.3.0/conf"
+  command "rename 's/$/\.orig/' ./*"
+  creates "/opt/apache-cassandra-incubating-0.3.0"  
+  action :run
+end
+
+link "/opt/cassandra" do
+  to "/opt/apache-cassandra-incubating-0.3.0"
+end
+
+link "/etc/cassandra" do
+  to "/opt/cassandra/conf"
+end
+
+template "/opt/apache-cassandra-incubating-0.3.0/conf/storage-conf.xml" do
   owner 'root'
   group 'root'
   mode 0644
   source "storage-conf.xml.erb"
-  variables({
-    :node => node
-  })
 end
 
-template "/etc/cassandra/log4j.properties" do
+template "/opt/apache-cassandra-incubating-0.3.0/conf/log4j.properties" do
   owner 'root'
   group 'root'
   mode 0644
   source "log4j.properties.erb"
-  variables({
-    :node => node
-  })
 end
 
-link "/etc/cassandra/" do
-  to "/opt/cassandra/"
+execute "ensure-cassandra-is-running" do
+  returns 1 
+  command %Q{
+    /opt/cassandra/bin/cassandra --host localhost --port 9160
+  }
+  not_if "pgrep -f org.apache.cassandra.service.CassandraDaemon"
 end
 
 
