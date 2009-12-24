@@ -3,7 +3,7 @@
 # Recipe:: default
 #
 
-mongoversion = '0.9.5'
+mongoversion = '1.2.0'
 
 directory "/db/mongodb" do
   owner "root"
